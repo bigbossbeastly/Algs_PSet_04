@@ -1,4 +1,6 @@
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
@@ -7,13 +9,31 @@ public class Solver
 {
     int moves = 0;
     boolean solved = false;
-    MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(COMPARATOR_FUNCTION);
+    
+    // MinPQ with Manhattan board comparator
+    MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(new Comparator<SearchNode>()
+    {
+    	public int compare(SearchNode A, SearchNode B)
+    	{
+    		if (A.board.manhattan() + A.moves < B.board.manhattan() + B.moves)
+    		{
+    			return -1;
+    		}
+    		else if (A.board.manhattan() + A.moves > B.board.manhattan() + B.moves)
+    		{
+    			return 1;
+    		}
+    		
+    		return 0;
+    	}
+    });
+    
+    ArrayList<Board> solution = new ArrayList<Board>(); 
+    
+    int numIterations = 0;
     
     public Solver(Board initial)
     {
-        System.out.println("start board!");
-        System.out.println(initial.toString());
-        
         SearchNode firstNode = new SearchNode(initial, 0, null);
         minPQ.insert(firstNode);
         
@@ -21,22 +41,60 @@ public class Solver
         {
             // Remove lowest priority node & check for success
             SearchNode toInvestigate = minPQ.delMin();
-            if (toInvestigate.myBoard.isGoal())
+            solution.add(toInvestigate.board);
+            
+            //System.out.println("NEXT DEQUEUE:");
+            //System.out.println("Manhattan(" + toInvestigate.board.manhattan() + ") + Moves(" + toInvestigate.moves + ") = " + (toInvestigate.board.manhattan() + toInvestigate.moves));
+            //System.out.println(toInvestigate.board.toString());
+            //System.out.println("-----------------------------------");
+            
+            if (toInvestigate.board.isGoal())
             {
-                System.out.println("Solved!");
-                System.out.println(toInvestigate.myBoard.toString());
+                System.out.println(toInvestigate.board.toString());
                 solved = true;
             }
             else
             {
+            	moves = toInvestigate.moves + 1;
+            	
                 // Add all neighboring boards & repeat
-                for (Board board : toInvestigate.myBoard.neighbors())
+                for (Board board : toInvestigate.board.neighbors())
                 {
-                    SearchNode nextNode = new SearchNode(board, ++moves, toInvestigate);
-                    minPQ.insert(nextNode);
+                	
+                	//System.out.println("Next neighbor (" + neighbor++ + ") || Manhattan: " + board.manhattan());
+                	//System.out.println(board.toString());
+                	
+                	SearchNode nextNode = new SearchNode(board, moves, toInvestigate);
+                	
+                	if (!checkPriorNodes(nextNode))
+                	{
+                		//System.out.println("next board in queue: ");
+                    	//System.out.println("Manhattan(" + board.manhattan() + ") + Moves(" + movesSoFar + ") = " + (board.manhattan() + movesSoFar));
+                    	//System.out.println(board.toString());
+                    	//System.out.println();
+                    	
+                		minPQ.insert(nextNode);
+                	}
                 }
             }
         }
+    }
+    
+    private boolean checkPriorNodes(SearchNode node)
+    {
+    	SearchNode previousNode = node.prevNode;
+    	
+		while(previousNode != null)
+		{
+			if (previousNode.board.equals(node.board))
+			{
+				return true;
+			}
+			
+			previousNode = previousNode.prevNode;
+		}
+    	
+    	return false;
     }
     
     /*------------------------------------------------------
@@ -44,20 +102,29 @@ public class Solver
      ------------------------------------------------------*/
     public class SearchNode
     {
-        Board myBoard;
-        int myMoves;
+        Board board;
+        int moves;
         SearchNode prevNode;
         
         public SearchNode(Board Board, int Moves, SearchNode PreviousNode)
         {
-            myBoard = Board;
-            myMoves = Moves;
+            board = Board;
+            moves = Moves;
             prevNode = PreviousNode;
         }
     }
     
     public boolean isSolvable()
     {
+    	/*
+    	
+		To detect such situations, use the fact that boards are divided into two equivalence classes with respect to reachability: (i) those that lead to the goal board and 
+		(ii) those that lead to the goal board if we modify the initial board by swapping any pair of blocks (the blank square is not a block). (Difficult challenge for 
+		the mathematically inclined: prove this fact.) To apply the fact, run the A* algorithm on two puzzle instances—one with the initial board and one with the initial 
+		board modified by swapping a pair of blocks—in lockstep (alternating back and forth between exploring search nodes in each of the two game trees). 
+		Exactly one of the two will lead to the goal board.
+		
+    	*/
         return false;
     }
     
@@ -66,12 +133,10 @@ public class Solver
         return moves;
     }
     
-    /*
     public Iterable<Board> solution()
     {
-        
+        return solution;
     }
-    */
     
     public static void main(String[] args) 
     {
@@ -101,10 +166,10 @@ public class Solver
         else 
         {
             StdOut.println("Minimum number of moves = " + solver.moves());
-            //for (Board board : solver.solution())
-            //{
-            //    StdOut.println(board);
-            //}
+            for (Board board : solver.solution())
+            {
+                StdOut.println(board);
+            }
         }
     }
 }

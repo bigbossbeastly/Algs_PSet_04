@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-import edu.princeton.cs.algs4.StdRandom;
+//import edu.princeton.cs.algs4.StdRandom;
 
 public class Board
 {
@@ -42,10 +42,10 @@ public class Board
                     // Store Manhattan
                     int[] coords = new int[2];
                     coords = ConvertTo2D(board[i][j] - 1);
-                    //System.out.println("Game value: " + board[i][j] + " || Grid index: " + ConvertTo1D(i, j) + " || 'should be' x/y coords: " + coords[0] + ", " + coords[1] + " || Actual x/y coords: " + i + ", " + j);
                     manhattanCount += (Math.abs((i - coords[1])) + Math.abs((j - coords[0])));
                     
-                    /*
+                    /* DEBUG
+                    System.out.println("Game value: " + board[i][j] + " || Grid index: " + ConvertTo1D(i, j) + " || 'should be' x/y coords: " + coords[0] + ", " + coords[1] + " || Actual x/y coords: " + i + ", " + j);
                     System.out.println("Array Value: " + board[i][j] + " || Board index " + boardID + " (" + i + " , " + j + ")");
                     System.out.println("2D X should be: " + coords[0] + " (diff = " + Math.abs((i - coords[0])) + ")");
                     System.out.println("2D Y should be: " + coords[1] + " (diff = " + Math.abs((j - coords[1])) + ")");
@@ -246,6 +246,7 @@ public class Board
         return boardString;
     }
     
+    /*
     public static void main(String[] args)
     {
         int randNum = StdRandom.uniform(3, 4);
@@ -263,13 +264,8 @@ public class Board
             }
         }
         
-        
         Board myBoard = new Board(tempArray);
-        Solver solveDatShit = new Solver(myBoard);
-        //System.out.println(myBoard.toString());
-        //myBoard.FindNeighbors();
-        //System.out.println("Hamming: " + myBoard.hamming());
-        //System.out.println("Manhattan: " + myBoard.manhattan());
-        
+        new Solver(myBoard);
     }
+    */
 }

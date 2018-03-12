@@ -7,40 +7,52 @@ public class Solver
 {
     int moves = 0;
     boolean solved = false;
-    Node lastNode;
-    MinPQ<Node> minPQ = new MinPQ<Node>();
+    MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(COMPARATOR_FUNCTION);
     
     public Solver(Board initial)
     {
-        Node firstNode = new Node(initial, 0, null);
+        System.out.println("start board!");
+        System.out.println(initial.toString());
+        
+        SearchNode firstNode = new SearchNode(initial, 0, null);
         minPQ.insert(firstNode);
-        lastNode = firstNode;
         
         while (!solved)
         {
-            // Iterate through all neighboring boards and insert the one with the lowest
-            // manhattan.
-            
-            moves++;
-            Node toInvestigate = minPQ.delMin();
-            
-            Board newBoard;
-            Node nextNode = new Node(newBoard, moves, lastNode);
-            minPQ.insert(nextNode);
-            lastNode = nextNode;
+            // Remove lowest priority node & check for success
+            SearchNode toInvestigate = minPQ.delMin();
+            if (toInvestigate.myBoard.isGoal())
+            {
+                System.out.println("Solved!");
+                System.out.println(toInvestigate.myBoard.toString());
+                solved = true;
+            }
+            else
+            {
+                // Add all neighboring boards & repeat
+                for (Board board : toInvestigate.myBoard.neighbors())
+                {
+                    SearchNode nextNode = new SearchNode(board, ++moves, toInvestigate);
+                    minPQ.insert(nextNode);
+                }
+            }
         }
     }
     
     /*------------------------------------------------------
      * Create a node to store our progress
      ------------------------------------------------------*/
-    public class Node
+    public class SearchNode
     {
-        public Node(Board Board, int Moves, Node PreviousNode)
+        Board myBoard;
+        int myMoves;
+        SearchNode prevNode;
+        
+        public SearchNode(Board Board, int Moves, SearchNode PreviousNode)
         {
-            Board myBoard = Board;
-            int myMoves = Moves;
-            Node prevNode = PreviousNode;
+            myBoard = Board;
+            myMoves = Moves;
+            prevNode = PreviousNode;
         }
     }
     

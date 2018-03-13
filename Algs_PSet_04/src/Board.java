@@ -11,7 +11,7 @@ public class Board
     private int hammingCount = 0;
     
     // Use array list so we don't need to manage array resizing & collection is Iterable
-    ArrayList<Board> neighbors = new ArrayList<Board>(); 
+    private ArrayList<Board> neighbors = new ArrayList<Board>(); 
     
     public Board(int[][] blocks)
     {

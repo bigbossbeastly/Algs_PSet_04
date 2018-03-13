@@ -7,11 +7,11 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Solver
 {
-    int moves = 0;
-    boolean solved = false;
+    private int moves = 0;
+    private boolean solved = false;
     
     // MinPQ with Manhattan board comparator
-    MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(new Comparator<SearchNode>()
+    private MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(new Comparator<SearchNode>()
     {
     	public int compare(SearchNode A, SearchNode B)
     	{
@@ -28,9 +28,7 @@ public class Solver
     	}
     });
     
-    ArrayList<Board> solution = new ArrayList<Board>(); 
-    
-    int numIterations = 0;
+    private ArrayList<Board> solution = new ArrayList<Board>(); 
     
     public Solver(Board initial)
     {
@@ -100,7 +98,7 @@ public class Solver
     /*------------------------------------------------------
      * Create a node to store our progress
      ------------------------------------------------------*/
-    public class SearchNode
+    private class SearchNode
     {
         Board board;
         int moves;

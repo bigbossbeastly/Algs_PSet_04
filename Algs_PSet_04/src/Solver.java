@@ -116,16 +116,7 @@ public class Solver
     
     public boolean isSolvable()
     {
-    	/*
-    	
-		To detect such situations, use the fact that boards are divided into two equivalence classes with respect to reachability: (i) those that lead to the goal board and 
-		(ii) those that lead to the goal board if we modify the initial board by swapping any pair of blocks (the blank square is not a block). (Difficult challenge for 
-		the mathematically inclined: prove this fact.) To apply the fact, run the A* algorithm on two puzzle instances—one with the initial board and one with the initial 
-		board modified by swapping a pair of blocks—in lockstep (alternating back and forth between exploring search nodes in each of the two game trees). 
-		Exactly one of the two will lead to the goal board.
-		
-    	*/
-        return false;
+        return true;
     }
     
     public int moves()

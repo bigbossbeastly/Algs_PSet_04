@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Board
 {
-    int[][] board;
-    int [] empty;
-    int dimension;
-    int manhattanCount = 0;
-    int hammingCount = 0;
+    private int[][] board;
+    private int [] empty;
+    private int dimension;
+    private int manhattanCount = 0;
+    private int hammingCount = 0;
     
     // Use array list so we don't need to manage array resizing & collection is Iterable
     ArrayList<Board> neighbors = new ArrayList<Board>(); 
@@ -265,7 +265,9 @@ public class Board
         }
         
         Board myBoard = new Board(tempArray);
-        new Solver(myBoard);
+        Solver solve = new Solver(myBoard);
+        System.out.println("Total moves taken: " + solve.moves());
     }
     */
+    
 }

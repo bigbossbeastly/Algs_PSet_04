@@ -33,6 +33,7 @@ public class Solver
     public Solver(Board initial)
     {
         SearchNode firstNode = new SearchNode(initial, 0, null);
+        solution.add(initial);
         minPQ.insert(firstNode);
         
         while (!solved)

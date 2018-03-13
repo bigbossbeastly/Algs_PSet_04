@@ -214,13 +214,16 @@ public class Board
     
     public Iterable<Board> neighbors()
     {
-        findNeighbors();
+    	if (neighbors.size() == 0)
+    	{
+    		findNeighbors();
+    	}
         return neighbors;
     }
     
     public String toString()
     {
-        String boardString = "";
+        String boardString = dimension + "\n";
         int defaultSpace = 1;
         int maxSpaces = String.valueOf(dimension * dimension).length() + defaultSpace;
         
@@ -269,5 +272,4 @@ public class Board
         System.out.println("Total moves taken: " + solve.moves());
     }
     */
-    
 }

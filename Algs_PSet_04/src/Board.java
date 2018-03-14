@@ -116,31 +116,22 @@ public class Board
                 tempArray[i][j] = board[i][j];
             }
         }
-
-        int randomX_01 = StdRandom.uniform(0, dimension);
-        int randomY_01 = StdRandom.uniform(0, dimension);
         
-        while (tempArray[randomX_01][randomY_01] == 0)
+        for (int i = 0; i < board.length; i++)
         {
-            randomX_01 = StdRandom.uniform(0, dimension);
-            randomY_01 = StdRandom.uniform(0, dimension);
+            for (int j = 0; j < board.length - 1; j++)
+            {
+                if (board[i][j] != 0 && board[i][j + 1] != 0)
+                {
+                    int tempValue = tempArray[i][j];
+                    tempArray[i][j] = tempArray[i][j + 1];
+                    tempArray[i][j + 1] = tempValue;
+                    return new Board(tempArray);
+                }
+            }
         }
         
-        int randomX_02 = StdRandom.uniform(0, dimension);
-        int randomY_02 = StdRandom.uniform(0, dimension);
-        
-        while (tempArray[randomX_02][randomY_02] == 0)
-        {
-            randomX_02 = StdRandom.uniform(0, dimension);
-            randomY_02 = StdRandom.uniform(0, dimension);
-        }
-        
-        // Swap
-        int tempValue = tempArray[randomX_01][randomY_01];
-        tempArray[randomX_01][randomY_01] = tempArray[randomX_02][randomY_02];
-        tempArray[randomX_02][randomY_02] = tempValue;
-        
-        return new Board(tempArray);
+        return null;
     }
     
     public boolean equals(Object y)

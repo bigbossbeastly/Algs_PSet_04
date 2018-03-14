@@ -40,8 +40,7 @@ public class Board
                     }
                     
                     // Store Manhattan
-                    int[] coords = new int[2];
-                    coords = ConvertTo2D(board[i][j] - 1);
+                    int[] coords = ConvertTo2D(board[i][j] - 1);
                     manhattanCount += (Math.abs((i - coords[1])) + Math.abs((j - coords[0])));
                     
                     /* DEBUG
@@ -221,9 +220,24 @@ public class Board
         return neighbors;
     }
     
+    public String toString() 
+    {
+        StringBuilder s = new StringBuilder();
+        s.append(dimension + "\n");
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                s.append(String.format("%2d ", board[i][j]));
+            }
+            s.append("\n");
+        }
+        return s.toString();
+    }
+    
+    /*
     public String toString()
     {
-        String boardString = dimension + "\n";
+        StringBuilder boardString = new StringBuilder();
+        boardString.append(dimension + "\n");
         int defaultSpace = 1;
         int maxSpaces = String.valueOf(dimension * dimension).length() + defaultSpace;
         
@@ -232,22 +246,23 @@ public class Board
             for (int j = 0; j < board[i].length; j++)
             {
                 // Append next element
-                boardString += board[i][j];
+                boardString.append(board[i][j]);
                 
                 // Add spaces to account for greatest number of digits
                 int mySpaces = String.valueOf(board[i][j]).length();
-                boardString += new String(new char[maxSpaces-mySpaces]).replace("\0", " ");
+                boardString.append(new String(new char[maxSpaces-mySpaces]).replace("\0", " "));
                 
                 // new line
                 if (j == dimension-1)
                 {
-                    boardString += "\n";
+                    boardString.append("\n");
                 }
             }
         }
         
-        return boardString;
+        return boardString.toString();
     }
+    */
     
     /*
     public static void main(String[] args)
@@ -257,7 +272,7 @@ public class Board
         
         int nextNum = 0;
         
-        int test[] = { 8, 1, 3, 4, 0, 2, 7, 6, 5 };
+        int test[] = { 4, 1, 3, 0, 2, 5, 7, 8, 6 };
         
         for (int i = 0; i < tempArray.length; i ++)
         {
@@ -269,6 +284,12 @@ public class Board
         
         Board myBoard = new Board(tempArray);
         Solver solve = new Solver(myBoard);
+        
+        for (Board board : solve.solution())
+        {
+            System.out.println(board.toString());
+        }
+        
         System.out.println("Total moves taken: " + solve.moves());
     }
     */

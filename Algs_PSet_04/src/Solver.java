@@ -9,6 +9,7 @@ public class Solver
 {
     private int moves = 0;
     private boolean solved = false;
+    private SearchNode finalNode;
     
     // MinPQ with Manhattan board comparator
     private MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(new Comparator<SearchNode>()
@@ -40,7 +41,6 @@ public class Solver
         {
             // Remove lowest priority node & check for success
             SearchNode toInvestigate = minPQ.delMin();
-            solution.add(toInvestigate.board);
             
             //System.out.println("NEXT DEQUEUE:");
             //System.out.println("Manhattan(" + toInvestigate.board.manhattan() + ") + Moves(" + toInvestigate.moves + ") = " + (toInvestigate.board.manhattan() + toInvestigate.moves));
@@ -49,7 +49,7 @@ public class Solver
             
             if (toInvestigate.board.isGoal())
             {
-                System.out.println(toInvestigate.board.toString());
+                finalNode = toInvestigate;
                 solved = true;
             }
             else
@@ -76,6 +76,12 @@ public class Solver
                 	}
                 }
             }
+        }
+        
+        while (finalNode.prevNode != null)
+        {
+            solution.add(finalNode.prevNode.board);
+            finalNode = finalNode.prevNode;
         }
     }
     

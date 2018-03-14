@@ -7,7 +7,6 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Solver
 {
-    private Board init;
     private int moves = 0;
     private boolean solved = false;
     
@@ -33,7 +32,11 @@ public class Solver
     
     public Solver(Board initial)
     {
-        init = initial;
+        if (initial == null)
+        {
+            throw new java.lang.IllegalArgumentException();
+        }
+        
         SearchNode firstNode = new SearchNode(initial, 0, null);
         //solution.add(initial);
         minPQ.insert(firstNode);
@@ -91,11 +94,11 @@ public class Solver
                 {
                 	//System.out.println("Next neighbor (" + neighbor++ + ") || Manhattan: " + board.manhattan());
                 	//System.out.println(board.toString());
+                    if (toInvestigate.prevNode == null || !board.equals(toInvestigate.prevNode.board))
+                    {
                 	
-                	SearchNode nextNode = new SearchNode(board, moves, toInvestigate);
+                        SearchNode nextNode = new SearchNode(board, moves, toInvestigate);
                 	
-                	if (!checkPriorNodes(nextNode))
-                	{
                 		//System.out.println("next board in queue: ");
                     	//System.out.println("Manhattan(" + board.manhattan() + ") + Moves(" + movesSoFar + ") = " + (board.manhattan() + movesSoFar));
                     	//System.out.println(board.toString());
@@ -114,9 +117,12 @@ public class Solver
         
         for ( Board board : node.board.neighbors() )
         {
-            if (board == node.prevNode.board)
+            if (node.prevNode != null)
             {
-                return true;
+                if (board.equals(node.prevNode.board))
+                {
+                    return true;
+                }
             }
         }
         

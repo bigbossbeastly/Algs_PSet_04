@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-//import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class Board
 {
@@ -224,8 +224,10 @@ public class Board
     {
         StringBuilder s = new StringBuilder();
         s.append(dimension + "\n");
-        for (int i = 0; i < dimension; i++) {
-            for (int j = 0; j < dimension; j++) {
+        for (int i = 0; i < dimension; i++) 
+        {
+            for (int j = 0; j < dimension; j++) 
+            {
                 s.append(String.format("%2d ", board[i][j]));
             }
             s.append("\n");
@@ -234,37 +236,7 @@ public class Board
     }
     
     /*
-    public String toString()
-    {
-        StringBuilder boardString = new StringBuilder();
-        boardString.append(dimension + "\n");
-        int defaultSpace = 1;
-        int maxSpaces = String.valueOf(dimension * dimension).length() + defaultSpace;
-        
-        for (int i = 0; i < board.length; i ++)
-        {
-            for (int j = 0; j < board[i].length; j++)
-            {
-                // Append next element
-                boardString.append(board[i][j]);
-                
-                // Add spaces to account for greatest number of digits
-                int mySpaces = String.valueOf(board[i][j]).length();
-                boardString.append(new String(new char[maxSpaces-mySpaces]).replace("\0", " "));
-                
-                // new line
-                if (j == dimension-1)
-                {
-                    boardString.append("\n");
-                }
-            }
-        }
-        
-        return boardString.toString();
-    }
-    */
     
-    /*
     public static void main(String[] args)
     {
         int randNum = StdRandom.uniform(3, 4);
@@ -272,7 +244,7 @@ public class Board
         
         int nextNum = 0;
         
-        int test[] = { 4, 1, 3, 0, 2, 5, 7, 8, 6 };
+        int test[] = { 8, 1, 3, 4, 0, 2, 7, 6, 5 };
         
         for (int i = 0; i < tempArray.length; i ++)
         {
@@ -289,6 +261,7 @@ public class Board
         {
             System.out.println(board.toString());
         }
+        
         
         System.out.println("Total moves taken: " + solve.moves());
     }

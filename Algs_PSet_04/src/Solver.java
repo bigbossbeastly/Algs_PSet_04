@@ -9,7 +9,6 @@ public class Solver
 {
     private int moves = 0;
     private boolean solved = false;
-    private SearchNode finalNode;
     
     // MinPQ with Manhattan board comparator
     private MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(new Comparator<SearchNode>()
@@ -34,32 +33,58 @@ public class Solver
     public Solver(Board initial)
     {
         SearchNode firstNode = new SearchNode(initial, 0, null);
-        solution.add(initial);
+        //solution.add(initial);
         minPQ.insert(firstNode);
         
         while (!solved)
         {
             // Remove lowest priority node & check for success
             SearchNode toInvestigate = minPQ.delMin();
-            
+
             //System.out.println("NEXT DEQUEUE:");
             //System.out.println("Manhattan(" + toInvestigate.board.manhattan() + ") + Moves(" + toInvestigate.moves + ") = " + (toInvestigate.board.manhattan() + toInvestigate.moves));
             //System.out.println(toInvestigate.board.toString());
             //System.out.println("-----------------------------------");
             
+            
             if (toInvestigate.board.isGoal())
             {
-                finalNode = toInvestigate;
                 solved = true;
+                
+                //System.out.println("Solution: ");
+                //System.out.println(toInvestigate.board.toString());
+                
+                //SearchNode finalNode = toInvestigate;
+                moves = 0;
+                while (toInvestigate.prevNode != null)
+                {
+                    moves++;
+                    solution.add(toInvestigate.board);
+                    toInvestigate = toInvestigate.prevNode;
+                }
+                
+                // Janky swap
+                ArrayList<Board> tempSwapOrder = new ArrayList<Board>(); 
+                
+                for (int i = solution.size() - 1; i >= 0; i-- )
+                {
+                    tempSwapOrder.add(solution.get(i));
+                }
+                
+                int index = 0;
+                for ( Board board : tempSwapOrder )
+                {
+                    solution.set(index++, board);
+                }
             }
             else
             {
             	moves = toInvestigate.moves + 1;
             	
+            	
                 // Add all neighboring boards & repeat
                 for (Board board : toInvestigate.board.neighbors())
                 {
-                	
                 	//System.out.println("Next neighbor (" + neighbor++ + ") || Manhattan: " + board.manhattan());
                 	//System.out.println(board.toString());
                 	
@@ -71,17 +96,12 @@ public class Solver
                     	//System.out.println("Manhattan(" + board.manhattan() + ") + Moves(" + movesSoFar + ") = " + (board.manhattan() + movesSoFar));
                     	//System.out.println(board.toString());
                     	//System.out.println();
-                    	
+                	    
+                	    
                 		minPQ.insert(nextNode);
                 	}
                 }
             }
-        }
-        
-        while (finalNode.prevNode != null)
-        {
-            solution.add(finalNode.prevNode.board);
-            finalNode = finalNode.prevNode;
         }
     }
     

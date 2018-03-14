@@ -92,7 +92,6 @@ public class Solver
 	                {
 	                    moves++;
 	                    temp.push(toInvestigate.board);
-	                    solution.add(toInvestigate.board);
 	                    toInvestigate = toInvestigate.prevNode;
 	                }
 	                

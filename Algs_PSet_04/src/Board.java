@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-import edu.princeton.cs.algs4.StdRandom;
+//import edu.princeton.cs.algs4.StdRandom;
 
 public class Board
 {
@@ -264,8 +264,7 @@ public class Board
         return s.toString();
     }
     
-    
-    
+    /*
     public static void main(String[] args)
     {
         int randNum = StdRandom.uniform(3, 4);
@@ -286,13 +285,8 @@ public class Board
         Board myBoard = new Board(tempArray);
         Solver solve = new Solver(myBoard);
         
-        for (Board board : solve.solution())
-        {
-            System.out.println(board.toString());
-        }
-        
-        
+        System.out.println("Board is solvable: " + solve.isSolvable());
         System.out.println("Total moves taken: " + solve.moves());
     }
-    
+    */
 }

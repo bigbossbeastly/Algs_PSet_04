@@ -29,6 +29,23 @@ public class Solver
     	}
     });
     
+    private MinPQ<SearchNode> minPQComp = new MinPQ<SearchNode>(new Comparator<SearchNode>()
+    {
+    	public int compare(SearchNode A, SearchNode B)
+    	{
+    		if (A.board.manhattan() + A.moves < B.board.manhattan() + B.moves)
+    		{
+    			return -1;
+    		}
+    		else if (A.board.manhattan() + A.moves > B.board.manhattan() + B.moves)
+    		{
+    			return 1;
+    		}
+    		
+    		return 0;
+    	}
+    });
+    
     private ArrayList<Board> solution = new ArrayList<Board>(); 
     
     public Solver(Board initial)
@@ -39,75 +56,79 @@ public class Solver
         }
         
         SearchNode firstNode = new SearchNode(initial, 0, null);
-        //solution.add(initial);
+        SearchNode firstNodeComp = new SearchNode(initial.twin(), 0, null);
+        
         minPQ.insert(firstNode);
+        minPQComp.insert(firstNodeComp);
         
         while (!solved)
         {
             // Remove lowest priority node & check for success
             SearchNode toInvestigate = minPQ.delMin();
-
+            SearchNode toInvestigateComp = minPQComp.delMin();
             //System.out.println("NEXT DEQUEUE:");
             //System.out.println("Manhattan(" + toInvestigate.board.manhattan() + ") + Moves(" + toInvestigate.moves + ") = " + (toInvestigate.board.manhattan() + toInvestigate.moves));
             //System.out.println(toInvestigate.board.toString());
             //System.out.println("-----------------------------------");
             
-            
-            if (toInvestigate.board.isGoal())
+            if (toInvestigate.board.isGoal() || toInvestigateComp.board.isGoal())
             {
-                solved = true;
-                
-                //System.out.println("Solution: ");
-                //System.out.println(toInvestigate.board.toString());
-                
-                //SearchNode finalNode = toInvestigate;
-                moves = 0;
-                while (toInvestigate.prevNode != null)
-                {
-                    moves++;
-                    solution.add(toInvestigate.board);
-                    toInvestigate = toInvestigate.prevNode;
-                }
-                
-                solution.add(initial);
-                
-                // Janky swap
-                ArrayList<Board> tempSwapOrder = new ArrayList<Board>(); 
-                
-                for (int i = solution.size() - 1; i >= 0; i-- )
-                {
-                    tempSwapOrder.add(solution.get(i));
-                }
-                
-                int index = 0;
-                for ( Board board : tempSwapOrder )
-                {
-                    solution.set(index++, board);
-                }
+            	if (toInvestigateComp.board.isGoal())
+            	{
+            		solvable = false;
+            		break;
+            	}
+            	else
+            	{
+	                solved = true;
+	                solvable = true;
+	                moves = 0;
+	                while (toInvestigate.prevNode != null)
+	                {
+	                    moves++;
+	                    solution.add(toInvestigate.board);
+	                    toInvestigate = toInvestigate.prevNode;
+	                }
+	                
+	                solution.add(initial);
+	                
+	                // Janky swap
+	                ArrayList<Board> tempSwapOrder = new ArrayList<Board>(); 
+	                
+	                for (int i = solution.size() - 1; i >= 0; i-- )
+	                {
+	                    tempSwapOrder.add(solution.get(i));
+	                }
+	                
+	                int index = 0;
+	                for ( Board board : tempSwapOrder )
+	                {
+	                    solution.set(index++, board);
+	                }
+            	}
             }
             else
             {
             	moves = toInvestigate.moves + 1;
             	
-            	
                 // Add all neighboring boards & repeat
                 for (Board board : toInvestigate.board.neighbors())
                 {
-                	//System.out.println("Next neighbor (" + neighbor++ + ") || Manhattan: " + board.manhattan());
-                	//System.out.println(board.toString());
                     if (toInvestigate.prevNode == null || !board.equals(toInvestigate.prevNode.board))
                     {
-                	
                         SearchNode nextNode = new SearchNode(board, moves, toInvestigate);
-                	
-                		//System.out.println("next board in queue: ");
-                    	//System.out.println("Manhattan(" + board.manhattan() + ") + Moves(" + movesSoFar + ") = " + (board.manhattan() + movesSoFar));
-                    	//System.out.println(board.toString());
-                    	//System.out.println();
-                	    
-                	    
                 		minPQ.insert(nextNode);
-                	}
+                    }
+                }
+                
+                // Add all neighboring boards to twin compare
+                for (Board board : toInvestigateComp.board.neighbors())
+                {
+                    if (toInvestigateComp.prevNode == null || !board.equals(toInvestigateComp.prevNode.board))
+                    {
+                        SearchNode nextNode = new SearchNode(board, moves, toInvestigateComp);
+                		minPQComp.insert(nextNode);
+                    }
                 }
             }
         }

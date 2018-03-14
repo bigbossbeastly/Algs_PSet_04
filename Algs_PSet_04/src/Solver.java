@@ -55,7 +55,7 @@ public class Solver
                 //System.out.println(toInvestigate.board.toString());
                 
                 //SearchNode finalNode = toInvestigate;
-                moves = 0;
+                moves = 1;
                 while (toInvestigate.prevNode != null)
                 {
                     moves++;

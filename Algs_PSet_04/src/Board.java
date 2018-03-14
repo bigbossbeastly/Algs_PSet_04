@@ -15,6 +15,11 @@ public class Board
     
     public Board(int[][] blocks)
     {
+        if (blocks == null)
+        {
+            throw new java.lang.IllegalArgumentException("Bad args to Board constructcor");
+        }
+        
         dimension = blocks.length;
         
         board = new int[dimension][dimension];
@@ -102,7 +107,40 @@ public class Board
     
     public Board twin()
     {
-        return new Board(new int[0][0]);
+        int tempArray[][] = new int[dimension][dimension];
+        
+        for (int i = 0; i < dimension; i ++)
+        {
+            for (int j = 0; j < dimension; j++)
+            {
+                tempArray[i][j] = board[i][j];
+            }
+        }
+
+        int randomX_01 = StdRandom.uniform(0, dimension);
+        int randomY_01 = StdRandom.uniform(0, dimension);
+        
+        while (tempArray[randomX_01][randomY_01] == 0)
+        {
+            randomX_01 = StdRandom.uniform(0, dimension);
+            randomY_01 = StdRandom.uniform(0, dimension);
+        }
+        
+        int randomX_02 = StdRandom.uniform(0, dimension);
+        int randomY_02 = StdRandom.uniform(0, dimension);
+        
+        while (tempArray[randomX_02][randomY_02] == 0)
+        {
+            randomX_02 = StdRandom.uniform(0, dimension);
+            randomY_02 = StdRandom.uniform(0, dimension);
+        }
+        
+        // Swap
+        int tempValue = tempArray[randomX_01][randomY_01];
+        tempArray[randomX_01][randomY_01] = tempArray[randomX_02][randomY_02];
+        tempArray[randomX_02][randomY_02] = tempValue;
+        
+        return new Board(tempArray);
     }
     
     public boolean equals(Object y)
@@ -235,7 +273,7 @@ public class Board
         return s.toString();
     }
     
-    /*
+    
     
     public static void main(String[] args)
     {
@@ -265,5 +303,5 @@ public class Board
         
         System.out.println("Total moves taken: " + solve.moves());
     }
-    */
+    
 }

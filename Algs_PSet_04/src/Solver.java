@@ -7,6 +7,7 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Solver
 {
+    private Board init;
     private int moves = 0;
     private boolean solved = false;
     
@@ -32,6 +33,7 @@ public class Solver
     
     public Solver(Board initial)
     {
+        init = initial;
         SearchNode firstNode = new SearchNode(initial, 0, null);
         //solution.add(initial);
         minPQ.insert(firstNode);
@@ -109,6 +111,16 @@ public class Solver
     
     private boolean checkPriorNodes(SearchNode node)
     {
+        
+        for ( Board board : node.board.neighbors() )
+        {
+            if (board == node.prevNode.board)
+            {
+                return true;
+            }
+        }
+        
+        /*
     	SearchNode previousNode = node.prevNode;
     	
 		while(previousNode != null)
@@ -120,6 +132,7 @@ public class Solver
 			
 			previousNode = previousNode.prevNode;
 		}
+		*/
     	
     	return false;
     }

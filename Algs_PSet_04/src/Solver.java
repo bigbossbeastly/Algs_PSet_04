@@ -55,13 +55,15 @@ public class Solver
                 //System.out.println(toInvestigate.board.toString());
                 
                 //SearchNode finalNode = toInvestigate;
-                moves = 1;
+                moves = 0;
                 while (toInvestigate.prevNode != null)
                 {
                     moves++;
                     solution.add(toInvestigate.board);
                     toInvestigate = toInvestigate.prevNode;
                 }
+                
+                solution.add(initial);
                 
                 // Janky swap
                 ArrayList<Board> tempSwapOrder = new ArrayList<Board>(); 

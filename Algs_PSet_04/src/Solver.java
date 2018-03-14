@@ -7,8 +7,10 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Solver
 {
+    private Board init;
     private int moves = 0;
     private boolean solved = false;
+    private boolean solvable;
     
     // MinPQ with Manhattan board comparator
     private MinPQ<SearchNode> minPQ = new MinPQ<SearchNode>(new Comparator<SearchNode>()
@@ -36,6 +38,15 @@ public class Solver
         {
             throw new java.lang.IllegalArgumentException();
         }
+        
+        solvable = isSolvableInternal(initial);
+        
+        if (!isSolvable())
+        {
+            return;
+        }
+        
+        init = initial;
         
         SearchNode firstNode = new SearchNode(initial, 0, null);
         //solution.add(initial);
@@ -112,36 +123,6 @@ public class Solver
         }
     }
     
-    private boolean checkPriorNodes(SearchNode node)
-    {
-        
-        for ( Board board : node.board.neighbors() )
-        {
-            if (node.prevNode != null)
-            {
-                if (board.equals(node.prevNode.board))
-                {
-                    return true;
-                }
-            }
-        }
-        
-        /*
-    	SearchNode previousNode = node.prevNode;
-    	
-		while(previousNode != null)
-		{
-			if (previousNode.board.equals(node.board))
-			{
-				return true;
-			}
-			
-			previousNode = previousNode.prevNode;
-		}
-		*/
-    	
-    	return false;
-    }
     
     /*------------------------------------------------------
      * Create a node to store our progress
@@ -162,17 +143,46 @@ public class Solver
     
     public boolean isSolvable()
     {
-        return true;
+        return solvable;
+    }
+    
+    private boolean isSolvableInternal(Board initialBoard)
+    {
+        Board initialBoardCopy = new Board();
+        Board twinBoard = initialBoard.twin();
+        
+        while (twinBoard.isGoal() == false && initialBoard.isGoal() == false)
+        {
+            
+        }
+        
+        if (initialBoardCopy.isGoal())
+        {
+            return true;
+        }
+        
+        return false;
     }
     
     public int moves()
     {
-        return moves;
+        if (isSolvable())
+        {
+            return moves;
+        }
+        
+        return -1;
+        
     }
     
     public Iterable<Board> solution()
     {
-        return solution;
+        if (isSolvable())
+        {
+            return solution;
+        }
+        
+        return null;
     }
     
     public static void main(String[] args) 

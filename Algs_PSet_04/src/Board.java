@@ -273,7 +273,7 @@ public class Board
         
         int nextNum = 0;
         
-        int test[] = { 8, 1, 3, 4, 0, 2, 7, 6, 5 };
+        int test[] = { 1, 2, 3, 4, 5, 6, 8, 7, 0 };
         
         for (int i = 0; i < tempArray.length; i ++)
         {

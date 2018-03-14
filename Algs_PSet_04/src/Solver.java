@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
 public class Solver
@@ -16,11 +17,14 @@ public class Solver
     {
     	public int compare(SearchNode A, SearchNode B)
     	{
-    		if (A.board.manhattan() + A.moves < B.board.manhattan() + B.moves)
+    		int aManhattan = A.board.manhattan() + A.moves;
+    		int bManahattan = B.board.manhattan() + B.moves;
+    		
+    		if (aManhattan < bManahattan)
     		{
     			return -1;
     		}
-    		else if (A.board.manhattan() + A.moves > B.board.manhattan() + B.moves)
+    		else if (aManhattan > bManahattan)
     		{
     			return 1;
     		}
@@ -33,11 +37,14 @@ public class Solver
     {
     	public int compare(SearchNode A, SearchNode B)
     	{
-    		if (A.board.manhattan() + A.moves < B.board.manhattan() + B.moves)
+    		int aManhattan = A.board.manhattan() + A.moves;
+    		int bManahattan = B.board.manhattan() + B.moves;
+    		
+    		if (aManhattan < bManahattan)
     		{
     			return -1;
     		}
-    		else if (A.board.manhattan() + A.moves > B.board.manhattan() + B.moves)
+    		else if (aManhattan > bManahattan)
     		{
     			return 1;
     		}
@@ -66,10 +73,6 @@ public class Solver
             // Remove lowest priority node & check for success
             SearchNode toInvestigate = minPQ.delMin();
             SearchNode toInvestigateComp = minPQComp.delMin();
-            //System.out.println("NEXT DEQUEUE:");
-            //System.out.println("Manhattan(" + toInvestigate.board.manhattan() + ") + Moves(" + toInvestigate.moves + ") = " + (toInvestigate.board.manhattan() + toInvestigate.moves));
-            //System.out.println(toInvestigate.board.toString());
-            //System.out.println("-----------------------------------");
             
             if (toInvestigate.board.isGoal() || toInvestigateComp.board.isGoal())
             {
@@ -83,28 +86,23 @@ public class Solver
 	                solved = true;
 	                solvable = true;
 	                moves = 0;
+	                
+	                Stack<Board> temp = new Stack<Board>();
 	                while (toInvestigate.prevNode != null)
 	                {
 	                    moves++;
+	                    temp.push(toInvestigate.board);
 	                    solution.add(toInvestigate.board);
 	                    toInvestigate = toInvestigate.prevNode;
 	                }
 	                
+	                // Swap order by popping from stack until its empty
+	                while (!temp.isEmpty())
+	                {
+	                	solution.add(temp.pop());
+	                }
+	                
 	                solution.add(initial);
-	                
-	                // Janky swap
-	                ArrayList<Board> tempSwapOrder = new ArrayList<Board>(); 
-	                
-	                for (int i = solution.size() - 1; i >= 0; i-- )
-	                {
-	                    tempSwapOrder.add(solution.get(i));
-	                }
-	                
-	                int index = 0;
-	                for ( Board board : tempSwapOrder )
-	                {
-	                    solution.set(index++, board);
-	                }
             	}
             }
             else

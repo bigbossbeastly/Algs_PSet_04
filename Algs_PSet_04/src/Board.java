@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-//import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class Board
 {
@@ -47,14 +47,6 @@ public class Board
                     // Store Manhattan
                     int[] coords = ConvertTo2D(board[i][j] - 1);
                     manhattanCount += (Math.abs((i - coords[1])) + Math.abs((j - coords[0])));
-                    
-                    /* DEBUG
-                    System.out.println("Game value: " + board[i][j] + " || Grid index: " + ConvertTo1D(i, j) + " || 'should be' x/y coords: " + coords[0] + ", " + coords[1] + " || Actual x/y coords: " + i + ", " + j);
-                    System.out.println("Array Value: " + board[i][j] + " || Board index " + boardID + " (" + i + " , " + j + ")");
-                    System.out.println("2D X should be: " + coords[0] + " (diff = " + Math.abs((i - coords[0])) + ")");
-                    System.out.println("2D Y should be: " + coords[1] + " (diff = " + Math.abs((j - coords[1])) + ")");
-                    System.out.println();
-                    */
                 }
             }
         }
@@ -264,7 +256,7 @@ public class Board
         return s.toString();
     }
     
-    /*
+ 
     public static void main(String[] args)
     {
         int randNum = StdRandom.uniform(3, 4);
@@ -272,7 +264,7 @@ public class Board
         
         int nextNum = 0;
         
-        int test[] = { 1, 2, 3, 4, 5, 6, 8, 7, 0 };
+        int test[] = { 8, 1, 3, 4, 0, 2, 7, 6, 5 };
         
         for (int i = 0; i < tempArray.length; i ++)
         {
@@ -288,5 +280,5 @@ public class Board
         System.out.println("Board is solvable: " + solve.isSolvable());
         System.out.println("Total moves taken: " + solve.moves());
     }
-    */
+    
 }

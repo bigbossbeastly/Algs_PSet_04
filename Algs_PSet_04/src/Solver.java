@@ -95,13 +95,13 @@ public class Solver
 	                    toInvestigate = toInvestigate.prevNode;
 	                }
 	                
+	                solution.add(initial);
+	                
 	                // Swap order by popping from stack until its empty
 	                while (!temp.isEmpty())
 	                {
 	                	solution.add(temp.pop());
 	                }
-	                
-	                solution.add(initial);
             	}
             }
             else

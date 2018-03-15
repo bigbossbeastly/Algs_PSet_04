@@ -1,6 +1,9 @@
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.Stack;
@@ -53,6 +56,17 @@ public class Solver
     	}
     });
     
+    Set<SearchNode> soFar = new TreeSet<SearchNode>(new BoardComparator());
+    
+    private class BoardComparator implements Comparator<SearchNode> {
+        public int compare(SearchNode o1, SearchNode o2) {
+            if (o1.equals(o2)) {
+                return 0;
+            }
+            return 1;
+        }
+    }
+    
     private ArrayList<Board> solution = new ArrayList<Board>(); 
     
     public Solver(Board initial)
@@ -67,6 +81,8 @@ public class Solver
         
         minPQ.insert(firstNode);
         minPQComp.insert(firstNodeComp);
+        
+        int numDequeued = 0;
         
         while (!solved)
         {
@@ -83,6 +99,7 @@ public class Solver
             	}
             	else
             	{
+            	    System.out.println("Number of boards examined: " + numDequeued);
 	                solved = true;
 	                solvable = true;
 	                moves = 0;
@@ -106,15 +123,17 @@ public class Solver
             }
             else
             {
-            	moves = toInvestigate.moves + 1;
-            	
                 // Add all neighboring boards & repeat
                 for (Board board : toInvestigate.board.neighbors())
                 {
                     if (toInvestigate.prevNode == null || !board.equals(toInvestigate.prevNode.board))
                     {
-                        SearchNode nextNode = new SearchNode(board, moves, toInvestigate);
-                		minPQ.insert(nextNode);
+                        SearchNode nextNode = new SearchNode(board, toInvestigate.moves + 1, toInvestigate);
+                        if (!soFar.contains(nextNode))
+                        {
+                            minPQ.insert(nextNode);
+                		    soFar.add(nextNode);
+                        }
                     }
                 }
                 
@@ -123,8 +142,12 @@ public class Solver
                 {
                     if (toInvestigateComp.prevNode == null || !board.equals(toInvestigateComp.prevNode.board))
                     {
-                        SearchNode nextNode = new SearchNode(board, moves, toInvestigateComp);
-                		minPQComp.insert(nextNode);
+                        SearchNode nextNode = new SearchNode(board, toInvestigate.moves + 1, toInvestigateComp);
+                        if (!soFar.contains(nextNode))
+                        {
+                    		minPQComp.insert(nextNode);
+                    		soFar.add(nextNode);
+                        }
                     }
                 }
             }
